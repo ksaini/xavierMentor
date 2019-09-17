@@ -97,6 +97,14 @@ a{
     text-align: center;
 	text-transform:none;
 }
+.badge-notify{
+   background:#d2527f;
+   position:relative;
+   top: -105px;
+   left: 65px;
+   font-size:12px;
+	font-family: 'open_sans','Open Sans',sans-serif;
+}
 </style>
     <title>GreyBox School</title>
 </head>
@@ -111,7 +119,7 @@ a{
         <span class="icon-bar"></span>
         <span class="icon-bar"></span> 
       </button>
-      <a class="navbar-brand" style="font-size: 12px;" href="dashboard.html">St. Xavier Public School</a>
+      <a class="navbar-brand" style="font-size: 12px;" href="dashboard.html">GB SCHOOL</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
@@ -141,7 +149,7 @@ a{
 			</a>
 		</div>
 		
-		 <div class="col-xs-6 slimR fixedH">
+		 <div class="col-xs-6 slimR fixedH" id="discussion">
 			<a href="./communicate.html">
 			<div class="panel panel-primary slim spray"><br>
 				<i id='users' class="fa fa-3x fa-comment"></i>
@@ -174,6 +182,17 @@ a{
 
 <script async defer type="text/javascript">
 app.initialize();
+newMsg();
+
+function newMsg(){
+	var c_arr = localStorage["cid_arr"].split(",");
+	var cid = localStorage["cid"];
+	for(var i=0;i<c_arr.length;i++){
+		if(c_arr[i]==cid)
+			document.getElementById("discussion").innerHTML += '<span class="badge badge-notify">New</span>'; 
+	}
+	
+}
 
 function logout(){
 	localStorage['sid']='';

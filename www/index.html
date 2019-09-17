@@ -86,18 +86,17 @@ var branch="";
 		<div class="card">
 			 <div class="panel-body" style="text-align:center;padding-top:50px;">
                     <form class="form-horizontal" role="form">
-					<img class=''  src="img/xavier.png" align="center" style="width:85px;" /><br>
+					<img class=''  src="img/vms.png" align="center" style="width:85px;" /><br>
 					<p class="schoolname"><b>St. Xavier Public School</b></p>
                     <div class="form-group"><br>
                         <!---<label for="inputEmail3" class="col-sm-3 control-label">
                             Username</label>---->
-                    <!----    <div class="col-sm-9">
+                        <div class="col-sm-9">
 							<div class="dropdown ">
 							<button class="btn btn-sm dropdown-toggle" type="button" style="align:feft;border-color:#ccc;" data-toggle="dropdown" id="branch">Choose Branch
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu" id="sel">
-							<li><a href="#">Alwar</a></li>
-							<li><a href="#">Behror</a></li>
+							<li><a href="#">Xavier</a></li>
 							
 							</ul>
 						</div>
@@ -110,7 +109,7 @@ var branch="";
 							document.getElementById("branch").innerHTML = branch + '&nbsp;&nbsp;<span class="caret"></span>';
 							});
 						</script>	
-                        </div><br>----->
+                        </div><br>
                             <input type="text" class="form-control" id="uname" placeholder="Username" required>
                         </div>
                     </div>
@@ -125,7 +124,7 @@ var branch="";
                    
                     <div class="form-group last">
                         <div class="col-sm-offset-3 col-sm-9" align="center">
-                            <button type="button" onclick='verify()' class="btn btn-success btn-sm">
+                            <button type="button" onclick='verify()' id="btn-sign" class="btn btn-success btn-sm">
                                 Sign in</button>
                                  <button type="reset" onclick='reset()' class="btn btn-warning btn-sm">
                                 Reset</button><br><br>
@@ -151,13 +150,13 @@ var branch="";
 
 <script async defer type="text/javascript">
 app.initialize();
-branch = "xavier";
 function verify(){
 if(branch.trim().length < 1)
 {
 	document.getElementById("footer").innerHTML = "Select a Branch First.";
 }
 else{	
+    document.getElementById("btn-sign").disabled = true;	
 	var key = branch.toLowerCase();
 	localStorage["db"] = key;	
 	if(localStorage.getItem("sid")!=null && localStorage.getItem("sid").length > 0)
@@ -177,6 +176,7 @@ function verifyUser(u,p,k){
 		if (req.readyState == 4 && req.status == 200) {
 			try {
 				var dataArray=JSON.parse(req.responseText);
+				document.getElementById("btn-sign").disabled = false;	
 				setdata(dataArray);
 								
 			} catch (e) {
@@ -195,8 +195,17 @@ function setdata(data){
 		localStorage["mname"] = data["mname"];// Mentor Name
 		localStorage["mid"] = data["mid"];// Mentor Id
 		localStorage["cidlist"] = data["cid"];
+		//create a map of cid and mid to represent last replied message-box
+		//This map will be useful to hint if there are new messages for any class.
+		var cid_mid = [];
+		var c = data["cid"].split(",");
+		for(var i=0;i<c.length;i++){
+			cid_mid.push([c[i],0]);
+		}
+		localStorage["cid_mid"] = JSON.stringify(cid_mid);
+		
 		// Go to resolve CID page to give mentors a choice, if they are eligible to access more t han one classes
-		document.location='resolveCID.html?cid=' + data["cid"];	
+		document.location='resolveCID.html?login=1&cid=' + data["cid"];	
 		}
 	else
 		document.getElementById("footer").innerHTML = "Username or Password not correct.<br> Please try again.";

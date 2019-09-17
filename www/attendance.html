@@ -136,11 +136,12 @@ body {
                     </ul>
                 </div>
                 <div class="panel-footer " id="panel-footer">
+				<div class="alert-info" style="text-align:center;display:none;" id="smsstat"> Sending SMS...</div>
                     <div class="input-group">
                        
                         <span class="input-group-btn">
                             <button class="btn btn-warning btn-sm" style="height:80px;width:100%;padding-bottom:10px;font-size:18px;" id="btn-chat" onclick="updateAttendance()">Send</button>
-							<button class="btn btn-success btn-sm gbhide" style="height:80px;width:100%;padding-bottom:10px;font-size:18px;" id="btn-confirm" onclick="sendAtt()">Confirm</button><br>
+							<button class="btn btn-success btn-sm gbhide" style="height:80px;width:100%;padding-bottom:10px;font-size:18px;" id="btn-confirm" onclick="sendAtt();sendSMSBySID();">Confirm</button><br>
 							<button class="btn btn-warning btn-sm gbhide" style="height:80px;width:100%;padding-bottom:10px;font-size:18px;" id="btn-back" onclick="attBack()">Go Back</button>
                         </span>
                     </div>
@@ -159,9 +160,7 @@ body {
 	var mid = getMessageID();
 	showAttList();
 	
-	//populateLocalMsg(mid);
 	
-	//populateRemoteMsg();
 </script>	
 <script>
 

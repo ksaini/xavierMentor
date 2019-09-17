@@ -237,9 +237,13 @@ var sql = "cid=" + localStorage.getItem("cid") + "&key=" + localStorage["db"];
 function processAttend(data){
 	
 	for (var i = 0; i < data.length; i++) {
-		att.push(parseInt(data[i]['sid']));
-		document.getElementById("m_" + data[i]['sid']).style.background = "#F1A9A0";
+		
+		try{
+			document.getElementById("m_" + data[i]['sid']).style.background = "#F1A9A0";
+			att.push(parseInt(data[i]['sid']));
+		} catch (e) {}
 	}
+	
 }
 
 function populateAtt(data){
@@ -325,13 +329,16 @@ function attBack(){
 
 function sendAtt(){
 	var sql = "secret=" + JSON.stringify(att) + "&key=" + localStorage["db"];
+	document.getElementById("smsstat").style.display = "block";
+	$("#smsstat").html("Updating Attendance...");
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			try {				
 				//alert(req.responseText)
+				$("#smsstat").html("Updated...Sending Messages on Student APP.");
 				localStorage.setItem("stattend","");
-				window.location.href = "dashboard.html";
+				//window.location.href = "dashboard.html";
 								
 			} catch (e) {
 				console.log("Exception::-"+e.toString());
@@ -346,6 +353,28 @@ function sendAtt(){
 	req.send(sql);
 	
 }
+function sendSMSBySID(){
+	//alert(JSON.stringify(result));
+	var sql = JSON.stringify(att);
+	document.getElementById("smsstat").style.display = "block";
+	$("#smsstat").html("Sending SMS...");
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			try {
+				$("#smsstat").html("Sent SMS to students...Done!");
+				window.location.href = "dashboard.html";
+			} catch (e) {	}
+		}
+	};
+	
+	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
+	
+	req.open("GET", base_url + "/smsAtt.php?q="+sql, true);
+	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	req.send();
+	
+	}	  
 
 function showHW(){
 	var req = new XMLHttpRequest();
@@ -447,7 +476,7 @@ function sendHW(sub,hwdesc,imguri){
 		if (req.readyState == 4 && req.status == 200) {
 			try {
 				//alert(req.responseText);
-				
+				document.getElementById("btn-send").disabled = false;	
 				location.reload();
 				
 								
